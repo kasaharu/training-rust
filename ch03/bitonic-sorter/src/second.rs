@@ -1,3 +1,12 @@
+use super::SortOrder;
+
+pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) {
+  match *order {
+    SortOrder::Ascending => do_sort(x, true),
+    SortOrder::Descending => do_sort(x, false),
+  }
+}
+
 fn do_sort<T: Ord>(x: &mut [T], up: bool) {
   if x.len() > 1 {
     let mid_point = x.len() / 2;
