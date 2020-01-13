@@ -1,8 +1,8 @@
-pub fn sort<T: Ord>(x: &mut [T], up: bool) {
+fn do_sort<T: Ord>(x: &mut [T], up: bool) {
   if x.len() > 1 {
     let mid_point = x.len() / 2;
-    sort(&mut x[..mid_point], true);
-    sort(&mut x[mid_point..], false);
+    do_sort(&mut x[..mid_point], true);
+    do_sort(&mut x[mid_point..], false);
     sub_sort(x, up);
   }
 }
@@ -11,8 +11,8 @@ fn sub_sort<T: Ord>(x: &mut [T], up: bool) {
   if x.len() > 1 {
     compare_and_swap(x, up);
     let mid_point = x.len() / 2;
-    sort(&mut x[..mid_point], up);
-    sort(&mut x[mid_point..], up);
+    do_sort(&mut x[..mid_point], up);
+    do_sort(&mut x[mid_point..], up);
   }
 }
 
