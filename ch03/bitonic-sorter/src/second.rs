@@ -86,7 +86,7 @@ mod tests {
       "no",
       "GC",
     ];
-    sort(&mut x, true);
+    sort(&mut x, false);
     assert_eq!(
       x,
       vec![
