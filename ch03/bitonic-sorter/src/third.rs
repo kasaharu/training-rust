@@ -1,10 +1,11 @@
 use super::SortOrder;
+use std::cmp::Ordering;
 
 pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
   if x.len().is_power_of_two() {
     match *order {
-      SortOrder::Ascending => do_sort(x, true),
-      SortOrder::Descending => do_sort(x, false),
+      SortOrder::Ascending => do_sort(x, true, &|a, b| a.cmp(b)),
+      SortOrder::Descending => do_sort(x, false, &|a, b| a.cmp(b)),
     };
     Ok(())
   } else {
@@ -15,28 +16,59 @@ pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
   }
 }
 
-fn do_sort<T: Ord>(x: &mut [T], up: bool) {
-  if x.len() > 1 {
-    let mid_point = x.len() / 2;
-    do_sort(&mut x[..mid_point], true);
-    do_sort(&mut x[mid_point..], false);
-    sub_sort(x, up);
+pub fn sort_by<T, F>(x: &mut [T], comparator: &F) -> Result<(), String>
+where
+  F: Fn(&T, &T) -> Ordering,
+{
+  if x.len().is_power_of_two() {
+    do_sort(x, true, comparator);
+    Ok(())
+  } else {
+    Err(format!(
+      "The length of x is not a power of two. (x.lent(): {})",
+      x.len()
+    ))
   }
 }
 
-fn sub_sort<T: Ord>(x: &mut [T], up: bool) {
+fn do_sort<T, F>(x: &mut [T], forword: bool, comparator: &F)
+where
+  F: Fn(&T, &T) -> Ordering,
+{
   if x.len() > 1 {
-    compare_and_swap(x, up);
     let mid_point = x.len() / 2;
-    do_sort(&mut x[..mid_point], up);
-    do_sort(&mut x[mid_point..], up);
+
+    do_sort(&mut x[..mid_point], true, comparator);
+    do_sort(&mut x[mid_point..], false, comparator);
+    sub_sort(x, forword, comparator);
   }
 }
 
-fn compare_and_swap<T: Ord>(x: &mut [T], up: bool) {
+fn sub_sort<T, F>(x: &mut [T], forword: bool, comparator: &F)
+where
+  F: Fn(&T, &T) -> Ordering,
+{
+  if x.len() > 1 {
+    compare_and_swap(x, forword, comparator);
+    let mid_point = x.len() / 2;
+    do_sort(&mut x[..mid_point], forword, comparator);
+    do_sort(&mut x[mid_point..], forword, comparator);
+  }
+}
+
+fn compare_and_swap<T, F>(x: &mut [T], forword: bool, comparator: &F)
+where
+  F: Fn(&T, &T) -> Ordering,
+{
+  let swap_condition = if forword {
+    Ordering::Greater
+  } else {
+    Ordering::Less
+  };
+
   let mid_point = x.len() / 2;
   for i in 0..mid_point {
-    if (x[i] > x[mid_point + i]) == up {
+    if comparator(&x[i], &x[mid_point + i]) == swap_condition {
       x.swap(i, mid_point + i);
     }
   }
@@ -45,7 +77,7 @@ fn compare_and_swap<T: Ord>(x: &mut [T], up: bool) {
 // 単体テスト
 #[cfg(test)]
 mod tests {
-  use super::{is_power_of_two, sort, sort_by};
+  use super::{sort, sort_by};
   use crate::SortOrder::*;
 
   // 構造体 Student を定義
