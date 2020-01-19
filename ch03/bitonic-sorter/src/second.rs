@@ -122,7 +122,7 @@ mod tests {
 
   #[test]
   fn sort_to_fail() {
-    let mut x = vec![10, 30, 11];
+    let mut x = vec![10, 30, 11]; // x.len() が 2 の冪乗でない
     assert!(sort(&mut x, &Ascending).is_err());
   }
 }
