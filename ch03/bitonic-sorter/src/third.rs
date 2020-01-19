@@ -55,6 +55,16 @@ mod tests {
     age: u8, // 8 bit 符号なし整数
   }
 
+  impl Student {
+    fn new(first_name: &str, last_name: &str, age: u8) -> Self {
+      Self {
+        first_name: first_name.to_string(),
+        last_name: last_name.to_string(),
+        age,
+      }
+    }
+  }
+
   #[test]
   fn sort_u32_ascending() {
     let mut x: Vec<u32> = vec![10, 30, 11, 20, 4, 330, 21, 110];
