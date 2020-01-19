@@ -81,6 +81,7 @@ mod tests {
   use crate::SortOrder::*;
 
   // 構造体 Student を定義
+  #[derive(Debug, PartialEq)]
   struct Student {
     first_name: String,
     last_name: String,
