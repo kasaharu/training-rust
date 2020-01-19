@@ -48,6 +48,13 @@ mod tests {
   use super::sort;
   use crate::SortOrder::*;
 
+  // 構造体 Student を定義
+  struct Student {
+    first_name: String,
+    last_name: String,
+    age: u8, // 8 bit 符号なし整数
+  }
+
   #[test]
   fn sort_u32_ascending() {
     let mut x: Vec<u32> = vec![10, 30, 11, 20, 4, 330, 21, 110];
