@@ -45,7 +45,7 @@ fn compare_and_swap<T: Ord>(x: &mut [T], up: bool) {
 // 単体テスト
 #[cfg(test)]
 mod tests {
-  use super::sort;
+  use super::{is_power_of_two, sort, sort_by};
   use crate::SortOrder::*;
 
   // 構造体 Student を定義
@@ -141,5 +141,19 @@ mod tests {
   fn sort_to_fail() {
     let mut x = vec![10, 30, 11]; // x.len() が 2 の冪乗でない
     assert!(sort(&mut x, &Ascending).is_err());
+  }
+
+  #[test]
+  fn sort_students_by_age_ascending() {
+    let taro = Student::new("Taro", "Yamada", 16);
+    let hanako = Student::new("Hanako", "Yamada", 14);
+    let kyoko = Student::new("Kyoko", "Ito", 15);
+    let ryosuke = Student::new("Ryosuke", "Hayashi", 17);
+
+    let mut x = vec![&taro, &hanako, &kyoko, &ryosuke];
+    let expected = vec![&hanako, &kyoko, &taro, &ryosuke];
+
+    assert_eq!(sort_by(&mut x, &|a, b| a.age.cmp(&b.age)), Ok(()));
+    assert_eq!(x, expected);
   }
 }
