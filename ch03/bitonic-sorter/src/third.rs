@@ -2,17 +2,9 @@ use super::SortOrder;
 use std::cmp::Ordering;
 
 pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
-  if x.len().is_power_of_two() {
-    match *order {
-      SortOrder::Ascending => do_sort(x, true, &|a, b| a.cmp(b)),
-      SortOrder::Descending => do_sort(x, false, &|a, b| a.cmp(b)),
-    };
-    Ok(())
-  } else {
-    Err(format!(
-      "The length of x is not a power of two. (x.lent(): {})",
-      x.len()
-    ))
+  match *order {
+    SortOrder::Ascending => sort_by(x, &|a, b| a.cmp(b)),
+    SortOrder::Descending => sort_by(x, &|a, b| b.cmp(a)),
   }
 }
 
