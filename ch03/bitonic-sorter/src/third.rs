@@ -201,4 +201,23 @@ mod tests {
     );
     assert_eq!(x, expected);
   }
+
+  // 3-5-9
+
+  use crate::utils::{is_sorted_ascending, is_sorted_descending, new_u32_vec};
+
+  #[test]
+  fn sort_u32_large() {
+    {
+      let mut x = new_u32_vec(4096);
+      assert_eq!(sort(&mut x, &Ascending), Ok(()));
+      assert!(is_sorted_ascending(&x))
+    }
+
+    {
+      let mut x = new_u32_vec(4096);
+      assert_eq!(sort(&mut x, &Descending), Ok(()));
+      assert!(is_sorted_descending(&x))
+    }
+  }
 }
