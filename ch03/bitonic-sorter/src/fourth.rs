@@ -1,7 +1,10 @@
 use super::SortOrder;
+use rayon;
 use std::cmp::Ordering;
 
-pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
+const PARALLEL_THRESHOLD: usize = 4096;
+
+pub fn sort<T: Ord + Send>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
   match *order {
     SortOrder::Ascending => sort_by(x, &|a, b| a.cmp(b)),
     SortOrder::Descending => sort_by(x, &|a, b| b.cmp(a)),
@@ -10,7 +13,8 @@ pub fn sort<T: Ord>(x: &mut [T], order: &SortOrder) -> Result<(), String> {
 
 pub fn sort_by<T, F>(x: &mut [T], comparator: &F) -> Result<(), String>
 where
-  F: Fn(&T, &T) -> Ordering,
+  T: Send,
+  F: Sync + Fn(&T, &T) -> Ordering,
 {
   if x.len().is_power_of_two() {
     do_sort(x, true, comparator);
@@ -25,20 +29,30 @@ where
 
 fn do_sort<T, F>(x: &mut [T], forword: bool, comparator: &F)
 where
-  F: Fn(&T, &T) -> Ordering,
+  T: Send,
+  F: Sync + Fn(&T, &T) -> Ordering,
 {
   if x.len() > 1 {
     let mid_point = x.len() / 2;
+    let (first, second) = x.split_at_mut(mid_point);
 
-    do_sort(&mut x[..mid_point], true, comparator);
-    do_sort(&mut x[mid_point..], false, comparator);
+    if mid_point >= PARALLEL_THRESHOLD {
+      rayon::join(
+        || do_sort(first, true, comparator),
+        || do_sort(second, false, comparator),
+      );
+    } else {
+      do_sort(first, true, comparator);
+      do_sort(second, false, comparator);
+    }
     sub_sort(x, forword, comparator);
   }
 }
 
 fn sub_sort<T, F>(x: &mut [T], forword: bool, comparator: &F)
 where
-  F: Fn(&T, &T) -> Ordering,
+  T: Send,
+  F: Sync + Fn(&T, &T) -> Ordering,
 {
   if x.len() > 1 {
     compare_and_swap(x, forword, comparator);
@@ -209,13 +223,13 @@ mod tests {
   #[test]
   fn sort_u32_large() {
     {
-      let mut x = new_u32_vec(4096);
+      let mut x = new_u32_vec(4096 * 4);
       assert_eq!(sort(&mut x, &Ascending), Ok(()));
       assert!(is_sorted_ascending(&x))
     }
 
     {
-      let mut x = new_u32_vec(4096);
+      let mut x = new_u32_vec(4096 * 4);
       assert_eq!(sort(&mut x, &Descending), Ok(()));
       assert!(is_sorted_descending(&x))
     }
