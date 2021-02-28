@@ -16,4 +16,12 @@ fn main() {
     let quotient = 56.7 / 32.2;
     let remainder = 43 % 5;
     println!("The value of sum is: {}, difference is: {}, product is: {}, quotient is: {}, remainder is: {} ", sum, difference, product, quotient, remainder);
+
+    let tup = (500, 6.4, 1);
+    let (tup_x, tup_y, tup_z) = tup;
+    println!(
+        "The value of tup_x is: {}, tup_y is: {}, tup_z is: {}",
+        tup_x, tup_y, tup_z
+    );
+    println!("The value of tup.0 is: {}", tup.0);
 }
