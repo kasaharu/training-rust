@@ -24,4 +24,9 @@ fn main() {
         tup_x, tup_y, tup_z
     );
     println!("The value of tup.0 is: {}", tup.0);
+
+    let array = [1, 2, 3, 4, 5];
+    let index = 1;
+    let element = array[index];
+    println!("The value of element is: {}", element);
 }
