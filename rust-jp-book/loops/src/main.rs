@@ -5,5 +5,13 @@ fn main() {
         number = number - 1;
     }
 
-    println!("LIFTOFF!!!")
+    println!("LIFTOFF!!!");
+
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    while index < 5 {
+        println!("{}", a[index]);
+        index = index + 1;
+    }
 }
