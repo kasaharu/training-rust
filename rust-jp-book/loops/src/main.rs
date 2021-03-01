@@ -14,4 +14,8 @@ fn main() {
         println!("{}", a[index]);
         index = index + 1;
     }
+
+    for element in a.iter() {
+        println!("The value is: {}", element);
+    }
 }
