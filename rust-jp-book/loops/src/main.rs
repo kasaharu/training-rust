@@ -18,4 +18,10 @@ fn main() {
     for element in a.iter() {
         println!("The value is: {}", element);
     }
+
+    for number2 in (1..4).rev() {
+        println!("{}!", number2);
+    }
+
+    println!("LIFTOFF!!!");
 }
