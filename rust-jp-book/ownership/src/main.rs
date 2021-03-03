@@ -7,6 +7,12 @@ fn main() {
     let s3 = takes_and_gives_back(s2);
     println!("s3 = {}", s3);
 
+    let str = String::from("hello");
+    let len = calculate_length(&str);
+    println!("The length of '{}' is {}", str, len);
+    println!("The length of '{}' is {}", str, str.len());
+    println!("The length of '{}' is {}", str, &str.len());
+
     let x = 10;
     makes_copy(x);
     println!("x = {}", x);
@@ -28,4 +34,8 @@ fn gives_ownership() -> String {
 
 fn takes_and_gives_back(a_string: String) -> String {
     a_string
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
 }
