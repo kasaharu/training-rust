@@ -20,6 +20,10 @@ fn main() {
     let x = 10;
     makes_copy(x);
     println!("x = {}", x);
+
+    let s = String::from("hello world");
+    let first_word = first_word(&s);
+    println!("first_word = {}", first_word);
 }
 
 fn takes_ownership(some_string: String) {
@@ -46,4 +50,16 @@ fn calculate_length(s: &String) -> usize {
 
 fn change(s: &mut String) {
     s.push_str(", world")
+}
+
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
 }
