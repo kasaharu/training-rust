@@ -1,6 +1,17 @@
 fn main() {
     let s1 = String::from("hello");
-    let s2 = s1.clone();
+    takes_ownership(s1);
+    // println!("s1 = {}", s1); // 所有権が移動しているため s1 は有効ではない
 
-    println!("s1 = {}, s2 = {}", s1, s2);
+    let x = 10;
+    makes_copy(x);
+    println!("x = {}", x);
+}
+
+fn takes_ownership(some_string: String) {
+    println!("some_string = {}", some_string);
+}
+
+fn makes_copy(some_integer: i32) {
+    println!("some_integer = {}", some_integer);
 }
