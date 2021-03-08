@@ -26,6 +26,16 @@ fn main() {
     let none = plus_one(None);
     println!("six  value is {:?}", six);
     println!("none value is {:?}", none);
+
+    let some_u8_value = Some(0x8);
+    match some_u8_value {
+        Some(3) => println!("three: match"),
+        _ => (),
+    }
+
+    if let Some(3) = some_u8_value {
+        println!("three: if let");
+    }
 }
 
 fn value_in_cents(coin: Coin) -> u32 {
