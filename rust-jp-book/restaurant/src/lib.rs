@@ -7,8 +7,8 @@ mod tests {
 }
 
 mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
 
         fn seat_at_table() {}
     }
@@ -20,4 +20,12 @@ mod front_of_house {
 
         fn take_payment() {}
     }
+}
+
+pub fn eat_at_restaurant() {
+    // 絶対パス
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 相対パス
+    front_of_house::hosting::add_to_waitlist();
 }
