@@ -22,6 +22,17 @@ mod front_of_house {
     }
 }
 
+fn serve_order() {}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::serve_order();
+    }
+
+    fn cook_order() {}
+}
+
 pub fn eat_at_restaurant() {
     // 絶対パス
     crate::front_of_house::hosting::add_to_waitlist();
