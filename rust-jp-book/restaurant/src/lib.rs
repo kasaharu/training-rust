@@ -72,8 +72,8 @@ pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }
 
-use std::fmt::Result;
-use std::io::Result as IoResult;
-
-fn function1() -> Result {}
-fn function2() -> IoResult {}
+// use std::fmt::Result;
+// use std::io::Result as IoResult;
+//
+// fn function1() -> Result {}
+// fn function2() -> IoResult<()> {}
