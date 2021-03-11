@@ -19,4 +19,9 @@ fn main() {
     println!("third1 is {:?}", third1);
     println!("third2 is {:?}", third2);
     println!("ten    is {:?}", ten);
+
+    let v5 = vec![100, 32, 57];
+    for i in &v5 {
+        println!("{}", i);
+    }
 }
